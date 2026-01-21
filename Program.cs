@@ -29,7 +29,7 @@ using (var scope = app.Services.CreateScope())
 {
     var context=scope.ServiceProvider.GetRequiredService<AppDbcontext>();
     DbInitializer.SeedData(context);
-}
+}   
 app.UseHttpsRedirection();
 app.UseAuthorization();
 

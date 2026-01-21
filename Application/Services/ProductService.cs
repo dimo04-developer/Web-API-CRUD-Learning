@@ -25,5 +25,17 @@ namespace Application.Services
         {
             return await _productRepository.GetCheapProductsAsync(maxPrice);
         }
+        public async Task<Product>CreatAsync(Product product)
+        {
+            return await _productRepository.CreatAsync(product);
+        }
+        public async Task UpdateAsync(Product product)
+        {
+            await _productRepository.UpdateAsync(product);
+        }
+        public async Task<bool> Delete(int id)
+        {
+            return await _productRepository.Delete(id);
+        }
     }            
 }
