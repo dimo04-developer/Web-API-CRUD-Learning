@@ -36,6 +36,8 @@ namespace Controllers
         public async Task<IActionResult> GetByIdAsync(int id)
         {
             var Product = await _productServices.GetByIdAsync(id);
+             if (Product == null)
+            return NotFound("Product not found");
             return Ok(Product);
         }
         // GET: api/products/priceunder/500.58

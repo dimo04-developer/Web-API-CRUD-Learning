@@ -3,12 +3,29 @@ using Microsoft.EntityFrameworkCore;
 using Application.Services;
 using Application.Interfaces;
 using Infrastructure.Repositories;
-using Controllers;
+using Middleware;
+using Filters;
+using Serilog;
+using Serilog.Events;
 
+
+Log.Logger=new LoggerConfiguration().MinimumLevel.Information().WriteTo.Console()
+.WriteTo.File(
+    path:"Logs/Information/",
+    rollingInterval:RollingInterval.Hour,
+    restrictedToMinimumLevel:LogEventLevel.Information
+).WriteTo.File(
+    path:"Logs/Error/",
+    rollingInterval:RollingInterval.Hour,
+    restrictedToMinimumLevel:LogEventLevel.Error
+).CreateLogger();
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Host.UseSerilog();
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<ValidationFilter>();
+});
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -25,6 +42,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseMiddleware<ExceptionMiddleware>();
+
 using (var scope = app.Services.CreateScope())
 {
     var context=scope.ServiceProvider.GetRequiredService<AppDbcontext>();

@@ -15,6 +15,8 @@ namespace Infrastructure.Repositories
         }
         public async Task<IEnumerable<Product>> GetAllAsync()
         {
+            var a = 0;
+            var x = 10 / a;
             return await _context.Products
                             .Where(P => !P.IsDeleted)
                             .ToListAsync();
@@ -46,7 +48,7 @@ namespace Infrastructure.Repositories
             if (product == null || product.IsDeleted)
                 return false;
 
-            product.IsDeleted=true;
+            product.IsDeleted = true;
             await _context.SaveChangesAsync();
             return true;
         }
